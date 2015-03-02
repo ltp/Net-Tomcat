@@ -10,7 +10,6 @@ use Net::Tomcat::Common::Memory;
 use Net::Tomcat::Connector;
 use Net::Tomcat::Connector::Scoreboard;
 use Net::Tomcat::Connector::Statistics;
-use Data::Dumper;
 
 our $VERSION = '0.01';
 our @ATTR = qw(username password hostname);
@@ -212,7 +211,7 @@ __END__
 
 =head1 NAME
 
-Net::Tomcat - The great new Net::Tomcat!
+Net::Tomcat - A Perl API for monitoring Apache Tomcat.
 
 =head1 VERSION
 
@@ -222,23 +221,61 @@ Version 0.01
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
+Net::Tomcat is a Perl API for monitoring Apache Tomcat instances.
 
-Perhaps a little code snippet.
+        use Net::Tomcat;
 
-    use Net::Tomcat;
+        # Create a new Net::Tomcat object
+        my $tc = Net::Tomcat->new(
+                                username => 'admin',
+                                password => 'password',
+                                hostname => 'web-server-01.company.com'
+                              ) 
+                or die "Unable to create new Net::Tomcat object: $!\n";
 
-    my $foo = Net::Tomcat->new();
-    ...
+        # Print the Tomcat server version and JVM version information
+        print "Tomcat version: " . $tc->server->version . "\n"
+            . "JVM version: " . $tc->server->jvm_version . "\n";
 
-=head1 EXPORT
+        # Get all connectors as an array of Net::Tomcat::Connector objects
+        my @connectors = $tc->connectors;
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
+        # Print the connector names, and request and error counts
+        foreach my $connector ( @connectors ) {
+                print "Name: " . $connector->name . "\n"
+                    . "Request Count: ".$connector->request_count . "\n"
+                    . "Error Count: ".$connector->error_count . "\n\n"
+        }
+
+        # Directly access a connector by name
+        print "http-8080 error count: " 
+                . $tc->connector('http-8080')->stats->error_count . "\n";
+
 
 =head1 METHODS
 
-=head2 function1
+=head2 new ( %ARGS )
+
+Constructor - creates a new Net::Tomcat object.  This method takes three
+mandatory parameters and accepts six optional parameters.
+
+=over 4
+
+=item * username
+
+=item * password
+
+=item * hostname
+
+=item * port
+
+=item * proto
+
+=item * app_status_url
+
+=item * server_status_url
+
+=item * refresh_interval
 
 =cut
 
@@ -246,21 +283,27 @@ if you don't export anything, such as for a purely object-oriented module.
 
 Luke Poskitt, C<< <ltp at cpan.org> >>
 
+=head1 REPOSITORY
+
+L<https://github.com/ltp/Net-Tomcat>
+
+=head1 SEE ALSO
+
+L<Net::Tomcat::Server>
+L<Net::Tomcat::Connector>
+L<Net::Tomcat::Scoreboard>
+
 =head1 BUGS
 
 Please report any bugs or feature requests to C<bug-net-tomcat at rt.cpan.org>, or through
 the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Net-Tomcat>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
-
-
-
 =head1 SUPPORT
 
 You can find documentation for this module with the perldoc command.
 
     perldoc Net::Tomcat
-
 
 You can also look for information at:
 
@@ -327,6 +370,5 @@ YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR
 CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR
 CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 
 =cut
