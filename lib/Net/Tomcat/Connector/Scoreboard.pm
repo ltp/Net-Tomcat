@@ -3,10 +3,11 @@ package Net::Tomcat::Connector::Scoreboard;
 use strict;
 use warnings;
 
+use overload ( '""' => \&pretty_print );
+
 use  Net::Tomcat::Connector::Scoreboard::Entry;
 
 our $VERSION    = '0.01';
-our @ATTR       = qw();
 our %STATES     = (     
                         R => 'ready', 
                         P => 'parse', 
@@ -14,11 +15,6 @@ our %STATES     = (
                         F => 'finish',
                         K  => 'keepalive'
                 );
-
-foreach my $attr ( @ATTR ) {{
-        no strict 'refs';
-        *{ __PACKAGE__ . '::' . $attr } = sub { my $self = shift; return $self->{$attr} }
-}}
 
 foreach my $state ( keys %STATES ) {{
         no strict 'refs';
@@ -47,13 +43,39 @@ sub threads             { return @{ $_[0]->{__threads } }       }
 
 sub thread_count        { return scalar @{ $_[0]->{__threads} } }
 
+sub threads_for_client {
+        my ( $self, $client ) = @_;
+        return grep { $_->{client} eq $client } @{ $self->{__threads} };
+}
+
 sub threads_for_vhost {
         my ( $self, $vhost ) = @_;
         return grep { $_->{vhost} eq $vhost } @{ $self->{__threads} };
-        #my @threads = $self->threads;
 }
 
 sub __timestamp         { return $_[0]->{__timestamp}           }
+
+sub pretty_print {
+        my $self = shift;
+        print <<PP;
++----------+----------+----------+----------+--------------------+--------------------+----------------------------------------+
+|  Stage   |   Time   |  B Sent  |  B Recv  |       Client       |        VHost       |                Request                 |
++----------+----------+----------+----------+--------------------+--------------------+----------------------------------------+
+PP
+        map {
+                printf( "|%9s |%9s |%9s |%9s |%19s |%19s |%39s |\n",
+                        $_->stage,
+                        $_->time,
+                        $_->bytes_sent,
+                        $_->bytes_received,
+                        $_->client,
+                        $_->vhost,
+                        $_->request
+                )
+        } $self->threads;
+
+print "+----------+----------+----------+----------+--------------------+--------------------+----------------------------------------+\n";
+}
 
 1;
 __END__
@@ -86,7 +108,11 @@ aforementioned objects.
 
         # Retrieve a Net::Tomcat::Connector::Scoreboard object by explicit
         # connector name
-        my $stats = $tc->connector('http-8080')->scoreboard;
+        my $sb = $tc->connector('http-8080')->scoreboard;
+
+        # Extract or apply an interesting function to each of our
+        # scoreboard threads (requests).
+        map { 
 
 
 
