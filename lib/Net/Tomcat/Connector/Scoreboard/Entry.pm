@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 our $VERSION    = '0.01';
-our @ATTR       = qw(stage time client vhost request);
+our @ATTR       = qw(stage time client vhost request b_sent b_recv);
 
 foreach my $attr ( @ATTR ) {{
         no strict 'refs';
