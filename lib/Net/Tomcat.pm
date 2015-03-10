@@ -251,6 +251,14 @@ Net::Tomcat is a Perl API for monitoring Apache Tomcat instances.
         print "http-8080 error count: " 
                 . $tc->connector('http-8080')->stats->error_count . "\n";
 
+	# Retrieve a Net::Tomcat::Connector::Scoreboard object
+	# representing the request scoreboard of the connector.
+	my $scoreboard = $tc->connector('http-8080')->scoreboard;
+
+	# Get all threads in a servicing state as 
+	# Net::Tomcat::Connector::Scoreboard::Entry objects.
+	my @threads = $scoreboard->threads_service;
+
 
 =head1 METHODS
 
@@ -259,23 +267,97 @@ Net::Tomcat is a Perl API for monitoring Apache Tomcat instances.
 Constructor - creates a new Net::Tomcat object.  This method takes three
 mandatory parameters and accepts six optional parameters.
 
-=over 4
+=over 3
 
-=item * username
+=item username
 
-=item * password
+A valid username of a user account with access to the Tomcat management pages.
 
-=item * hostname
+=item password
 
-=item * port
+The password for the user account given for the username parameter above.
 
-=item * proto
+=item hostname
 
-=item * app_status_url
+The resolvable hostname or IP address of the target Tomcat server.
 
-=item * server_status_url
+=item port
 
-=item * refresh_interval
+The target port on the target Tomcat server on which to connect.
+
+If this parameter is not specified then it defaults to port 8080.
+
+=item proto
+
+The protocol to use when connecting to the target Tomcat server.
+
+If this parameter is not specified then it defaults to HTTP.
+
+=item app_status_url
+
+The relative URL of the Tomcat Web Application Manager web page.
+
+This parameter is optional and if not provided will default to a value of 
+'/manager/html/list'.
+
+If this parameter is provided then it should be a relative URL in respect
+to the hostname parameter.
+
+=item server_status_url
+
+The relative URL of the Tomcat Web Server Status web page.
+
+This parameter is optional and if not provided will default to a value of 
+'/manager/status/all'.
+
+If this parameter is provided then it should be a relative URL in respect
+to the hostname parameter.
+
+=item refresh_interval
+
+The interval in seconds after which any retrieved results should be regarded
+as invalid and discarded.  After this period has elapsed, subsequent requests
+for cached values will be issued to the Tomcat instance and the results will
+be cached for the duration of the refresh_interval period.
+
+Note that the refresh interval applies to all objects individually - that is;
+a L<Net::Tomcat::Connector> object may have a different refresh interval than
+a L<Net::Tomcat::Connector::Scoreboard> object.
+
+This parameter is optional and defaults to 3600s.  Caution shoudl be exercised
+when setting this parameter to avoid potential inconsistency in sequential
+calls to assumed immutable objects.
+
+=back
+
+=head2 connector ( $CONNECTOR )
+
+	# Print connector error count.
+	my $connector = $tc->connector( 'http-8080' );
+	print "Connecter http-8080 error count: " 
+		. $connector->stats->error_count . "\n";
+
+	# Or
+	printf( "Connector %s error count: %s\n",
+		$tc->connector('http-8080')->name,
+		$tc->connector('http-8080')->stats->error_count
+	);
+
+Returns a L<Net::Tomcat::Connector> object where the connector name is
+identified by the named $CONNECTOR parameter.
+
+=head2 connectors
+
+Returns an array of L<Net::Tomcat::Connector> objects representing all
+connector instances on the server.
+
+=head2 server
+
+Returns a L<Net::Tomcat::Server> object for the current instance.
+
+=head2 jvm
+
+Returns a L<Net::Tomcat::JVM> object for the current instance.
 
 =cut
 
