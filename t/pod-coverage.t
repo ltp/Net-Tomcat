@@ -11,7 +11,9 @@ eval "use Pod::Coverage $min_pc";
 
 my @modules = (
         { module => 'Net::Tomcat' },
-        { module => 'Net::Tomcat::Server', also_private => [ 'new' ] },
+        { module => 'Net::Tomcat::Server',                      also_private => [ 'new' ] },
+        { module => 'Net::Tomcat::Connector',                   also_private => [ 'new' ] },
+        { module => 'Net::Tomcat::Connector::Scoreboard',       also_private => [ 'new' ] },
 );
 
 ( $@ )  ? plan skip_all => "Pod::Coverage $min_pc required for testing POD coverage"
@@ -19,6 +21,6 @@ my @modules = (
 
 foreach my $module ( @modules ) {
         defined $module->{also_private}
-        ? pod_coverage_ok( $module->{module}, also_private => $module->{also_private} )
-        : pod_coverage_ok( $module->{module} )
+                ? pod_coverage_ok( $module->{module}, { also_private => $module->{also_private} } )
+                : pod_coverage_ok( $module->{module} )
 }
