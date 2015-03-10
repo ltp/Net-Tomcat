@@ -78,6 +78,7 @@ print "+----------+----------+----------+----------+--------------------+-------
 }
 
 1;
+
 __END__
 
 =head1 NAME
@@ -112,9 +113,13 @@ aforementioned objects.
 
         # Extract or apply an interesting function to each of our
         # scoreboard threads (requests).
-        map { 
+	my @threads_for_vhost = $sb->threads_for_vhost('myvhost');
 
+	# Print out a graphical representation of the scoreboard.
+	$sb->pretty_print;
 
+	# Or, using the overloaded stringification
+	print $sb;
 
 =head1 METHODS
 
@@ -125,6 +130,59 @@ that you should not normally need to call the constructor method directly as a
 Net::Tomcat::Connector::Statistics object will be created for you on invoking 
 methods in parent classes.
 
+=head3 threads
+
+Returns an array of L<Net::Tomcat::Connector::Scoreboard::Entry> objects where
+each object represents a thread currently being serviced by the connector.
+
+=head3 thread_count
+
+Returns the number of threads currently being services by the connector.
+
+=head3 threads_ready
+
+Returns the number of threads currently in a ready state.
+
+=head3 threads_service
+
+Returns the number of threads currently servicing a request.
+
+=head3 threads_parse
+
+Returns the number of threads currently in a parsing state.
+
+=head3 threads_keepalive
+
+Returns the number of threads currently in a keepalive state.
+
+=head3 threads_finish
+
+Returns the number of threads currently in a finish state.
+
+=head3 threads_for_client ( $CLIENT )
+
+	# Returns all threads for the client 10.80.8.8 on connector 'http-8080'
+	my @threads = $tc->connector('http-8080')->scoreboard->threads_for_client( '10.80.8.8' );
+
+Returns an array of L<Net::Tomcat::Connector::Scoreboard::Entry> objects where
+each object represents a current thread servicing the client identified by the 
+value of the $CLIENT parameter (usually an IP address).
+
+=head3 threads_for_vhost ( $VHOST )
+	
+	# Return all threads for the virtual host 'www-4.company.com'
+	my @threads = $tc->connector('http-8080')->scoreboard->threads_for_vhost( 'www-4.company.com' );
+
+Returns an array of L<Net::Tomcat::Connector::Scoreboard::Entry> objects for
+the virtual host (vhost) as defined by the value of the $VHOST parameter.
+
+=head3 pretty_print
+
+Prints an ascii representation of the scoreboard to standard out.
+
+Note that this module also stringifies to this method.
+
+=cut
 
 =head1 AUTHOR
 
@@ -137,3 +195,51 @@ at rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Net-Tomcat-Connector-Statistics>.
 I will be notified, and then you'll automatically be notified of progress on 
 your bug as I make changes.
+__END__
+
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc Net::Tomcat::Connector::Scoreboard
+
+
+You can also look for information at:
+
+=over 4
+
+=item * RT: CPAN's request tracker (report bugs here)
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Net-Tomcat-Connector-Scoreboard>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/Net-Tomcat-Connector-Scoreboard>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/Net-Tomcat-Connector-Scoreboard>
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/Net-Tomcat-Connector-Scoreboard/>
+
+=back
+
+
+=head1 ACKNOWLEDGEMENTS
+
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2015 Luke Poskitt.
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
+
+See http://dev.perl.org/licenses/ for more information.
+
+
+=cut
