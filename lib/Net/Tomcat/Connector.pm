@@ -63,8 +63,8 @@ Net::Tomcat::Connector is a utility class for representing Tomcat Connector obje
         # Print the connector names, and request and error counts
         foreach my $connector ( @connectors ) {
                 print "Name: " . $connector->name . "\n"
-                    . "Request Count: ".$connector->request_count . "\n"
-                    . "Error Count: ".$connector->error_count . "\n\n"
+                    . "Request Count: ".$connector->stats->request_count . "\n"
+                    . "Error Count: ".$connector->stats->error_count . "\n\n"
         }
 
         # Directly access a connector by name
