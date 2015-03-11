@@ -6,7 +6,6 @@ use warnings;
 use LWP;
 use Net::Tomcat::JVM;
 use Net::Tomcat::Server;
-use Net::Tomcat::Common::Memory;
 use Net::Tomcat::Connector;
 use Net::Tomcat::Connector::Scoreboard;
 use Net::Tomcat::Connector::Statistics;
