@@ -10,7 +10,7 @@ use Net::Tomcat::Connector;
 use Net::Tomcat::Connector::Scoreboard;
 use Net::Tomcat::Connector::Statistics;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 our @ATTR = qw(username password hostname);
 our $ATTR = {
 	username		=>	{ required => 1					},
