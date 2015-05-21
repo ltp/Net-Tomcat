@@ -3,7 +3,6 @@ package Net::Tomcat::Connector::Scoreboard::Entry;
 use strict;
 use warnings;
 
-our $VERSION    = '0.01';
 our @ATTR       = qw(stage time client vhost request b_sent b_recv);
 
 foreach my $attr ( @ATTR ) {{
@@ -36,12 +35,6 @@ __END__
 
 Net::Tomcat::Connector::Scoreboard::Entry - Utility class for representing 
 Tomcat Connector scoreboard entries.
-
-=head1 VERSION
-
-Version 0.01
-
-=cut
 
 =head1 SYNOPSIS
 

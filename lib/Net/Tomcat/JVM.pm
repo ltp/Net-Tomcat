@@ -3,7 +3,6 @@ package Net::Tomcat::JVM;
 use strict;
 use warnings;
 
-our $VERSION    = '0.01';
 our @ATTR       = qw(free_memory total_memory max_memory);
 
 foreach my $attr ( @ATTR ) {{
@@ -30,10 +29,6 @@ __END__
 =head1 NAME
 
 Net::Tomcat::JVM - Utility class for representing Apache Tomcat JVM objects.
-
-=head1 VERSION
-
-Version 0.01
 
 =cut
 

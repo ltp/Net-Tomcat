@@ -3,7 +3,6 @@ package Net::Tomcat::Connector::Statistics;
 use strict;
 use warnings;
 
-our $VERSION    = '0.01';
 our @ATTR       = qw(max_threads current_thread_count current_thread_busy max_processing_time 
                         processing_time request_count error_count bytes_received bytes_sent);
 
@@ -28,10 +27,6 @@ __END__
 
 Net::Tomcat::Connector::Statistics - Utility class for representing Tomcat 
 Connector statistics objects.
-
-=head1 VERSION
-
-Version 0.01
 
 =head1 SYNOPSIS
 

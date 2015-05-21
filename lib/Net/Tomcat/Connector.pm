@@ -6,7 +6,6 @@ use warnings;
 use overload 
         ( '""' => \&name );
 
-our $VERSION    = '0.01';
 our @ATTR       = qw(name stats scoreboard);
 
 foreach my $attr ( @ATTR ) {{
@@ -34,10 +33,6 @@ __END__
 =head1 NAME
 
 Net::Tomcat::Connector - Utility class for representing Tomcat Connector objects
-
-=head1 VERSION
-
-Version 0.01
 
 =head1 SYNOPSIS
 

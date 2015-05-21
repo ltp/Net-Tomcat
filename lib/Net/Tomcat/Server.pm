@@ -3,7 +3,6 @@ package Net::Tomcat::Server;
 use strict;
 use warnings;
 
-our $VERSION    = '0.01';
 our @ATTR       = qw(jvm_vendor jvm_version os_architecture os_name os_version tomcat_version);
 
 foreach my $attr ( @ATTR ) {{
@@ -29,12 +28,6 @@ __END__
 =head1 NAME
 
 Net::Tomcat::Server - Utility class for representing Apache Tomcat Server objects.
-
-=head1 VERSION
-
-Version 0.01
-
-=cut
 
 =head1 SYNOPSIS
 

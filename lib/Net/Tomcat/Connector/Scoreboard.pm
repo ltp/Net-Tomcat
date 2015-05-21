@@ -7,7 +7,6 @@ use overload ( '""' => \&pretty_print );
 
 use  Net::Tomcat::Connector::Scoreboard::Entry;
 
-our $VERSION    = '0.01';
 our %STATES     = (     
                         R => 'ready', 
                         P => 'parse', 
@@ -85,10 +84,6 @@ __END__
 
 Net::Tomcat::Connector::Scoreboard - Utility class for representing abstract 
 Tomcat Connector scoreboard objects.
-
-=head1 VERSION
-
-Version 0.01
 
 =head1 SYNOPSIS
 
